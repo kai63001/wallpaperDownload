@@ -48,23 +48,29 @@ app.get('/', async function (req, res, next) {
 var image_image = '';
 var image_name = '';
 var image_auth = '';
+var image_tag = [];
+var image_atag = [];
 app.use('/image/:id', async function (req, res, next) {
 
-    request('https://wall.alphacoders.com/big.php?i=' + req.params.id, async function (error, res, html) {
+    await request('https://wall.alphacoders.com/big.php?i=' + req.params.id, async function (error, res, html) {
         if (!error & res.statusCode == 200) {
             const $ = cheerio.load(html);
-            image_image = $('img.main-content').attr("src");
-            image_name = $('title').text().substring(0, $('title').text().indexOf('|'));
-            image_auth = $('span.author-container').children('a').text();
-            console.log(image_name);
+            image_image = await $('img.main-content').attr("src");
+            image_name = await $('title').text().substring(0, $('title').text().indexOf('|'));
+            image_auth = await $('span.author-container').children('a').text();
+            $('.tag-element').each(function (i, elem) {
+                image_tag[i] = $(this).children("a").text();
+                image_atag[i] = $(this).children("a").attr("href").replace('tags.php?tid=', '');
+            });
+            console.log(image_tag);
             next();
         }
     });
 
 
 
-}, function (req, res, next) {
-    res.render('image', { image: image_image, title: title, name: image_name, auth: image_auth });
+}, async function (req, res, next) {
+    await res.render('image', { image: image_image, title: title, name: image_name, auth: image_auth, tag: image_tag });
 });
 
 
