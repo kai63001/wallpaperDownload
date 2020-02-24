@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="row">
+    <% for(var i=1; i < image.length; i++) {%>
+    <div class="btngro col-md-4 col-12" style="margin-bottom: 15px;">
+      <a
+        href="/image/<%= id[i].replace('undefined','') %> "
+        style="text-decoration: none;color: black;margin-bottom: 15px;"
+      >
+        <img
+          style="margin-bottom: 5px;"
+          height="190px"
+          width="100%"
+          class="lazyload"
+          data-src="<%= image[i].replace('-350-','-1920-'); %>"
+          src="<%= image[i] %>"
+          alt="<%= name[i] %>"
+        />
+      </a>
+    </div>
+    <% } %>
+  </div>
+</div>
