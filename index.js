@@ -313,8 +313,14 @@ app.get(
 );
 
 app.get("/tags/:name/:id", function(req, reser, next) {
+    var page = 1;
+    if(req.query.page){
+        page = req.query.page;
+    }
+    var lastPage = 0;
+    console.log(page);
   request(
-    "https://wall.alphacoders.com/tags.php?tid=" + req.params.id + "&page=1",
+    "https://wall.alphacoders.com/tags.php?tid=" + req.params.id + "&page="+page,
     function(error, res, html) {
       if (!error & (res.statusCode == 200)) {
         const $ = cheerio.load(html);
@@ -330,6 +336,7 @@ app.get("/tags/:name/:id", function(req, reser, next) {
         var tags_image = [];
         var tags_name = [];
         var tags_id = [];
+        lastPage = $("div.quick-jump").children("div.input-group").children("input").attr("placeholder").replace('Page # / ','');
         $("img.lazy-load").each(function(i, elem) {
           if (
             $(this).hasClass("user-avatar") == false &&
@@ -348,6 +355,7 @@ app.get("/tags/:name/:id", function(req, reser, next) {
             j += 1;
           }
         });
+        console.log(lastPage);
         
         reser.render("tags", {
           title: title,
