@@ -168,14 +168,12 @@ app.use(
                   $(this)
                     .parent()
                     .attr("href")
-                    .indexOf("profile.php") < 0
-                 && 
-                 $(this)
+                    .indexOf("profile.php") < 0 &&
+                  $(this)
                     .parent()
                     .attr("href")
-                    .indexOf("by_creator.php") < 0
-                    && 
-                 $(this)
+                    .indexOf("by_creator.php") < 0 &&
+                  $(this)
                     .parent()
                     .attr("href")
                     .indexOf("creator") < 0
@@ -212,7 +210,7 @@ app.use(
                   ")",
                 function(err, res) {
                   if (err) {
-                      console.log('error primary key stuck');
+                    console.log("error primary key stuck");
                   }
                   next();
                   console.log("insert view database success!!!");
@@ -314,8 +312,55 @@ app.get(
   }
 );
 
-app.get('/tags/:name/:id',function(req,res,next){
-    res.send("success");
+app.get("/tags/:name/:id", function(req, reser, next) {
+  request(
+    "https://wall.alphacoders.com/tags.php?tid=" + req.params.id + "&page=1",
+    function(error, res, html) {
+      if (!error & (res.statusCode == 200)) {
+        const $ = cheerio.load(html);
+        var number_count = $("title")
+          .text()
+          .substr(
+            0,
+            $("title")
+              .text()
+              .indexOf(" ")
+          );
+        var j = 0;
+        var tags_image = [];
+        var tags_name = [];
+        var tags_id = [];
+        $("img.lazy-load").each(function(i, elem) {
+          if (
+            $(this).hasClass("user-avatar") == false &&
+            $(this).hasClass("media-object") == false &&
+            $(this).attr("data-src") !=
+              "https://static.alphacoders.com/contest-50-71.png"
+          ) {
+            tags_image[j] = $(this).attr("data-src");
+            tags_name[j] = $(this)
+              .parent()
+              .attr("title");
+            tags_id[j] = $(this)
+              .parent()
+              .attr("href")
+              .replace("big.php?i=", "");
+            j += 1;
+          }
+        });
+        
+        reser.render("tags", {
+          title: title,
+          tags: req.params.name,
+          count: number_count,
+          image: tags_image,
+          id: tags_id,
+          name: tags_name
+        });
+        // console.log(name);
+      }
+    }
+  );
 });
 
 app.listen(port, function() {
