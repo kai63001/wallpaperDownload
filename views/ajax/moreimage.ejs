@@ -1,6 +1,7 @@
 <div class="container">
+    <h4> <i class="fas fa-images"></i> Pictures you may like</h4>
   <div class="row">
-    <% for(var i=1; i < image.length; i++) {%>
+    <% for(var i=0; i < image.length; i++) {%>
     <div class="btngro col-md-4 col-12" style="margin-bottom: 15px;">
       <a
         href="/image/<%= id[i].replace('undefined','') %> "
@@ -8,13 +9,19 @@
       >
         <img
           style="margin-bottom: 5px;"
-          height="190px"
           width="100%"
           class="lazyload"
           data-src="<%= image[i].replace('-350-','-1920-'); %>"
           src="<%= image[i] %>"
-          alt="<%= name[i] %>"
+          alt=""
         />
+        <% for(var s=0; s < tags.length; s++) {%> <% if (tags[i][s]) { %>
+        <a href="<%= atags[i][s] %>" style="text-decoration: none;">
+          <span class="badge badge-dark" style="padding-right: 5px;"
+            ><%= tags[i][s] %>
+          </span>
+        </a>
+        <% } %> <% } %>
       </a>
     </div>
     <% } %>

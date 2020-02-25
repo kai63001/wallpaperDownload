@@ -55,9 +55,11 @@
     <%- include('include/nav') %>
     <center>
       <h1><%= name %></h1>
+      <% if (auth) { %>
       <a href="" class="author" style="">
         <i class="fas fa-user"></i> <%= auth %>
       </a>
+      <% } %>
     </center>
     <br />
 
@@ -76,6 +78,7 @@
 
       <br />
       <div class="float-left">
+        <% if (categoly.length > 0) { %>
         <i class="fas fa-images"></i> Category : <% for( let i = 0; i < 2; i++ )
         { %>
         <span class="badge badge-dark" style="padding-right: 5px;"
@@ -83,24 +86,50 @@
         </span>
         <% } %>
         <br />
-        <i class="fas fa-tags"></i> Tags : <% for( let i = 0; i < tag.length;
-        i++ ) { %>
-        <span class="badge badge-dark" style="padding-right: 5px;"
-          ><%= tag[i] %>
-        </span>
+
         <% } %>
+        <% if (tag.length > 0) { %>
+            <i class="fas fa-tags"></i> Tags : <% for( let i = 0; i < tag.length;
+            i++ ) { %>
+            <a href="/tags/<%= tag[i].replace(/ /g,'-') %>/<%= atag[i] %>"><span class="badge badge-dark" style="padding-right: 5px;"
+            ><%= tag[i] %>
+            </span></a>
+            <% } %>
+        <% } %>
+
       </div>
-      <div class="btn btn-danger float-right">
+      <button
+        id="download"
+        type="button"
+        data-toggle="modal"
+        data-target="#downloadPOPUp"
+        class="btn btn-danger float-right col-12 col-md-2"
+      >
         <i class="fas fa-download"></i> Download
-      </div>
+      </button>
     </div>
     <br /><br /><br />
     <div class="container">
-      Comment
+      <h4><i class="fas fa-comments"></i> Comments</h4>
+      <div id="fb-root"></div>
+      <script
+        async
+        defer
+        crossorigin="anonymous"
+        src="https://connect.facebook.net/th_TH/sdk.js#xfbml=1&version=v6.0&appId=153313228407799&autoLogAppEvents=1"
+      ></script>
+      <div
+        class="fb-comments"
+        data-href="https://wallpapersmoon.com/image/<%= id %>"
+        data-width="100%"
+        data-numposts="5"
+      ></div>
     </div>
     <br />
     <div class="container">
-      <div id="moreImage"></div>
+      <div class="row">
+        <div id="moreImage"></div>
+      </div>
     </div>
     <br /><br /><br />
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -114,12 +143,55 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+
+    <div
+      class="modal fade"
+      id="downloadPOPUp"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="downloadPOPUpLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <a class="modal-body">
+            <center><b>Download Wallpaper</b></center>
+            <br />
+            <center id="countDown">
+              Please, wait while your link is generating :
+              <span id="intnum">5</span>
+            </center>
+            <center id="downloadsuccess">
+                <br>
+              <a href="<%= image.replace('thumb-1920-','') %>" target="_blank" class="btn btn-dark col-md-9" style="color: white;" download="w3logo">
+                <i class="fas fa-download"></i> Download
+              </a>
+            </center>
+            <br>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
       $.ajax({
         url: "../../moreimage/<%= id %>",
         success: function(result) {
           $("#moreImage").html(result);
         }
+      });
+      $("#downloadsuccess").hide();
+      $("#download").click(function() {
+        var counter = 6;
+        var interval = setInterval(function() {
+          counter--;
+          $("#intnum").html(counter);
+          if (counter == 0) {
+            $("#downloadsuccess").show();
+            $("#countDown").hide();
+            clearInterval(interval);
+          }
+        }, 1000);
       });
     </script>
   </body>

@@ -78,13 +78,13 @@ var image_acategoly = [];
 
 app.use(
   "/image/:id",
-  function(req, res, next) {
+  function(req, reser, next) {
+    var image_check404 = false;
     var image_checkInser = false;
     var image_haveit = false;
     con.query(
       "select * from wallpaper where w_wid=" + req.params.id,
       async function(err, res) {
-        console.log(res.length);
         if (res.length > 0) {
           console.log("have it");
           image_haveit = true;
@@ -109,11 +109,16 @@ app.use(
           image_image = await res[0].w_image;
           image_name = await res[0].w_name;
           image_auth = await res[0].w_auth;
+          image_view = await res[0].w_view;
           var s_image_wtag = await res[0].w_tags;
-          console.log(s_image_wtag);
           image_tag = s_image_wtag.split(",");
           var s_image_watag = res[0].w_atags;
           image_atag = s_image_watag.split(",");
+          var s_image_categoly = await res[0].w_categoly;
+          console.log(s_image_categoly + "---");
+          image_categoly = s_image_categoly.split(",");
+          var s_image_wacategoly = res[0].w_acategoly;
+          image_acategoly = s_image_wacategoly.split(",");
           next();
         }
       }
@@ -125,65 +130,95 @@ app.use(
         "https://wall.alphacoders.com/big.php?i=" + req.params.id,
         async function(error, res, html) {
           if (!error & (res.statusCode == 200)) {
-            const $ = cheerio.load(html);
-            image_image = await $("img.main-content").attr("src");
-            image_name = await $("title")
-              .text()
-              .substring(
-                0,
-                $("title")
-                  .text()
-                  .indexOf("|")
-              );
-            image_auth = await $("span.author-container")
-              .children("a")
-              .text();
-            $(".tag-element").each(function(i, elem) {
-              image_tag[i] = $(this)
+            console.log("------");
+            console.log(html.indexOf("With Our Monthly Raffle You Could Win:"));
+            console.log("------");
+            if (html.indexOf("With Our Monthly Raffle You Could Win:") > 0) {
+              reser.send("404 ERROR");
+              reser.end();
+            } else {
+              image_check404 = true;
+            }
+            if (image_check404 == true) {
+              const $ = cheerio.load(html);
+              image_image = await $("img.main-content").attr("src");
+              image_name = await $("title")
+                .text()
+                .substring(
+                  0,
+                  $("title")
+                    .text()
+                    .indexOf("|")
+                );
+              image_auth = await $("span.author-container")
                 .children("a")
                 .text();
-              image_atag[i] = $(this)
-                .children("a")
-                .attr("href")
-                .replace("tags.php?tid=", "");
-            });
-            $("strong").each(function(i, elem) {
-              image_categoly[i] = $(this).text();
-              image_acategoly[i] = $(this)
-                .parent()
-                .attr("href")
-                .replace("by_category.php?id=", "")
-                .replace("by_sub_category.php?id=", "");
-            });
-            console.log(image_tag);
-            con.query(
-              'insert into wallpaper (w_acategoly,w_categoly,w_atags,w_tags,w_auth,w_name,w_image,w_wid,w_view) VALUES ("' +
-                image_acategoly +
-                '","' +
-                image_categoly +
-                '","' +
-                image_atag +
-                '","' +
-                image_tag +
-                '","' +
-                image_auth +
-                '","' +
-                image_name +
-                '","' +
-                image_image +
-                '",' +
-                req.params.id +
-                "," +
-                1 +
-                ")",
-              function(err, res) {
-                if (err) {
-                  throw err;
+              $(".tag-element").each(function(i, elem) {
+                image_tag[i] = $(this)
+                  .children("a")
+                  .text();
+                image_atag[i] = $(this)
+                  .children("a")
+                  .attr("href")
+                  .replace("tags.php?tid=", "");
+              });
+              var image_j = 0;
+              $("strong").each(function(i, elem) {
+                if (
+                  $(this)
+                    .parent()
+                    .attr("href")
+                    .indexOf("profile.php") < 0
+                 && 
+                 $(this)
+                    .parent()
+                    .attr("href")
+                    .indexOf("by_creator.php") < 0
+                    && 
+                 $(this)
+                    .parent()
+                    .attr("href")
+                    .indexOf("creator") < 0
+                ) {
+                  image_categoly[image_j] = $(this).text();
+                  image_acategoly[image_j] = $(this)
+                    .parent()
+                    .attr("href");
+                  //   .replace("by_category.php?id=", "")
+                  //   .replace("by_sub_category.php?id=", "");
+                  image_j += 1;
                 }
-                next();
-                console.log("insert view database success!!!");
-              }
-            );
+              });
+              console.log(image_tag);
+              con.query(
+                'insert into wallpaper (w_acategoly,w_categoly,w_atags,w_tags,w_auth,w_name,w_image,w_wid,w_view) VALUES ("' +
+                  image_acategoly +
+                  '","' +
+                  image_categoly +
+                  '","' +
+                  image_atag +
+                  '","' +
+                  image_tag +
+                  '","' +
+                  image_auth +
+                  '","' +
+                  image_name +
+                  '","' +
+                  image_image +
+                  '",' +
+                  req.params.id +
+                  "," +
+                  1 +
+                  ")",
+                function(err, res) {
+                  if (err) {
+                      console.log('error primary key stuck');
+                  }
+                  next();
+                  console.log("insert view database success!!!");
+                }
+              );
+            }
           }
         }
       );
@@ -202,37 +237,86 @@ app.use(
       acategoly: image_acategoly,
       id: req.params.id
     });
+    image_categoly = [];
+    image_acategoly = [];
+    image_tag = [];
+    image_atag = [];
   }
 );
 
 const more_image = [];
-const more_name = [];
+var more_tags = [];
+var more_atags = [];
 const more_id = [];
 app.get(
   "/moreimage/:id",
-  function(req, res, next) {
-    request("https://wall.alphacoders.com/big.php?i=" + req.params.id, function(
-      error,
-      res,
-      html
-    ) {
-      if (!error & (res.statusCode == 200)) {
-        const $ = cheerio.load(html);
-        $("img.img-responsive").each(function(i, elem) {
-            more_image[i] = $(this).attr("data-src")
-            more_name[i] = $(this).parent().parents().attr("title");
-            more_id[i] = $(this).parent().parents().attr("href").replace('https://wall.alphacoders.com/big.php?i=');
-        });
-
-        next();
-        // console.log(name);
+  async function(req, res, next) {
+    await request(
+      "https://wall.alphacoders.com/big.php?i=" + req.params.id,
+      function(error, res, html) {
+        if (!error & (res.statusCode == 200)) {
+          const $ = cheerio.load(html);
+          $("img.img-responsive").each(function(i, elem) {
+            more_image[i] = $(this)
+              .attr("data-src")
+              .replace("thumbbig", "thumb-350");
+            more_id[i] = $(this)
+              .parent()
+              .parents()
+              .attr("href")
+              .replace("https://wall.alphacoders.com/big.php?i=", "");
+            more_tags.push([]);
+            more_atags.push([]);
+            for (
+              var s = 0;
+              s <
+              $(".tags-info")
+                .eq(i)
+                .children("a").length;
+              s++
+            ) {
+              more_tags[i].push(
+                $(".tags-info")
+                  .eq(i)
+                  .children("a")
+                  .eq(s)
+                  .text()
+                  .trim()
+                  .toString()
+              );
+              more_atags[i].push(
+                $(".tags-info")
+                  .eq(i)
+                  .children("a")
+                  .eq(s)
+                  .attr("href")
+                  .trim()
+                  .toString()
+                  .replace("/tags.php?tid=", "")
+              );
+            }
+          });
+          next();
+          console.log(more_tags);
+        }
       }
-    });
+    );
   },
   function(req, res, next) {
-    res.render("ajax/moreimage", { image: more_image ,name:more_name,id:more_id});
+    res.render("ajax/moreimage", {
+      image: more_image,
+      tags: more_tags,
+      atags: more_atags,
+      id: more_id
+    });
+    more_tags = [];
+    more_atags = [];
   }
 );
+
+app.get('/tags/:name/:id',function(req,res,next){
+    res.send("success");
+});
 
 app.listen(port, function() {
   console.log(`Example app listening on port ${port}!`);
