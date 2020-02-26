@@ -183,8 +183,6 @@ app.use(
                   image_acategoly[image_j] = $(this)
                     .parent()
                     .attr("href");
-                  //   .replace("by_category.php?id=", "")
-                  //   .replace("by_sub_category.php?id=", "");
                   image_j += 1;
                 }
               });
@@ -464,6 +462,80 @@ app.get("/search", function(req, reser) {
       }
     );
   }
+});
+
+app.get("/categoly/:name/:id", function(req, reser, next) {
+  var page = 1;
+  if (req.query.page) {
+    page = req.query.page;
+  }
+  var lastPage = 0;
+
+  request(
+    "https://wall.alphacoders.com/by_category.php?id=" +
+      req.params.id +
+      "&page=" +
+      page,
+    function(erro, res, html) {
+      if (!erro & (res.statusCode == 200)) {
+        const $ = cheerio.load(html);
+        var number_count = $("title")
+          .text()
+          .substr(
+            0,
+            $("title")
+              .text()
+              .indexOf(" ")
+          );
+        var j = 0;
+        var tags_image = [];
+        var tags_name = [];
+        var tags_id = [];
+        try {
+          lastPage = $("ul.pagination")
+            .eq(0)
+            .children("li").length;
+          lastPage = lastPage - 2;
+          lastPage = $("ul.pagination")
+            .eq(0)
+            .children("li")
+            .eq(lastPage)
+            .text();
+        } catch (error) {
+          console.log(error);
+        }
+        console.log(lastPage);
+        $("img.lazy-load").each(function(i, elem) {
+          if (
+            $(this).hasClass("user-avatar") == false &&
+            $(this).hasClass("media-object") == false &&
+            $(this).attr("data-src") !=
+              "https://static.alphacoders.com/contest-50-71.png"
+          ) {
+            tags_image[j] = $(this).attr("data-src");
+            tags_name[j] = $(this)
+              .parent()
+              .attr("title");
+            tags_id[j] = $(this)
+              .parent()
+              .attr("href")
+              .replace("big.php?i=", "");
+            j += 1;
+          }
+        });
+
+        reser.render("categoly", {
+          title: title,
+          name_search: req.params.name,
+          count: number_count,
+          image: tags_image,
+          id: tags_id,
+          name: tags_name,
+          lastPage: lastPage
+        });
+      }
+    }
+  );
 });
 
 app.listen(port, function() {
