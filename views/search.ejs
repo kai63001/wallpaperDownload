@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> <%= tags.replace(/-/g,' ') %> | <%= title %></title>
+    <title> <%= name_search.replace(/-/g,' ') %> | <%= title %></title>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -61,7 +61,7 @@
   <body style="font-family: 'Rubik' !important;">
     <%- include('include/nav') %>
     <center>
-      <h1><%= tags.replace(/-/g,' ') %></h1>
+      <h1><%= name_search.replace(/-/g,' ') %></h1>
       <%= count %> wallpaper
     </center>
     <br />
@@ -169,7 +169,7 @@
         hideOnlyOnePage: true,
 
         // template for pagination links
-        href: '?page={{number}}',
+        href: window.location.href.substr(0,window.location.href.indexOf("&"))+'&page={{number}}',
 
         pageVariable: '{{page}}',
         totalPagesVariable: '{{total_pages}}',

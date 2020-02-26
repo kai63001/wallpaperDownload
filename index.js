@@ -79,6 +79,7 @@ var image_acategoly = [];
 app.use(
   "/image/:id",
   function(req, reser, next) {
+    image_view = 0;
     var image_check404 = false;
     var image_checkInser = false;
     var image_haveit = false;
@@ -313,14 +314,17 @@ app.get(
 );
 
 app.get("/tags/:name/:id", function(req, reser, next) {
-    var page = 1;
-    if(req.query.page){
-        page = req.query.page;
-    }
-    var lastPage = 0;
-    console.log(page);
+  var page = 1;
+  if (req.query.page) {
+    page = req.query.page;
+  }
+  var lastPage = 0;
+  console.log(page);
   request(
-    "https://wall.alphacoders.com/tags.php?tid=" + req.params.id + "&page="+page,
+    "https://wall.alphacoders.com/tags.php?tid=" +
+      req.params.id +
+      "&page=" +
+      page,
     function(error, res, html) {
       if (!error & (res.statusCode == 200)) {
         const $ = cheerio.load(html);
@@ -336,7 +340,20 @@ app.get("/tags/:name/:id", function(req, reser, next) {
         var tags_image = [];
         var tags_name = [];
         var tags_id = [];
-        lastPage = $("div.quick-jump").children("div.input-group").children("input").attr("placeholder").replace('Page # / ','');
+        try {
+          lastPage = $("ul.pagination")
+            .eq(0)
+            .children("li").length;
+          lastPage = lastPage - 2;
+          lastPage = $("ul.pagination")
+            .eq(0)
+            .children("li")
+            .eq(lastPage)
+            .text();
+        } catch (error) {
+          console.log(error);
+        }
+        console.log(lastPage);
         $("img.lazy-load").each(function(i, elem) {
           if (
             $(this).hasClass("user-avatar") == false &&
@@ -355,20 +372,98 @@ app.get("/tags/:name/:id", function(req, reser, next) {
             j += 1;
           }
         });
-        console.log(lastPage);
-        
+
         reser.render("tags", {
           title: title,
           tags: req.params.name,
           count: number_count,
           image: tags_image,
           id: tags_id,
-          name: tags_name
+          name: tags_name,
+          lastPage: lastPage
         });
         // console.log(name);
       }
     }
   );
+});
+
+app.get("/search", function(req, reser) {
+  var page = 1;
+  if (req.query.page) {
+    page = req.query.page;
+  }
+  var lastPage = 0;
+  console.log(req.query.name.length);
+  if (req.query.name.length < 2) {
+    reser.send("Your search came back as empty. Please enter a new search.");
+  } else {
+    request(
+      "https://wall.alphacoders.com/search.php?search=" +
+        req.query.name +
+        "&page=" +
+        page,
+      function(erro, res, html) {
+        if (!erro & (res.statusCode == 200)) {
+          const $ = cheerio.load(html);
+          var number_count = $("title")
+            .text()
+            .substr(
+              0,
+              $("title")
+                .text()
+                .indexOf(" ")
+            );
+          var j = 0;
+          var tags_image = [];
+          var tags_name = [];
+          var tags_id = [];
+          try {
+            lastPage = $("ul.pagination")
+              .eq(0)
+              .children("li").length;
+            lastPage = lastPage - 2;
+            lastPage = $("ul.pagination")
+              .eq(0)
+              .children("li")
+              .eq(lastPage)
+              .text();
+          } catch (error) {
+            console.log(error);
+          }
+          console.log(lastPage);
+          $("img.lazy-load").each(function(i, elem) {
+            if (
+              $(this).hasClass("user-avatar") == false &&
+              $(this).hasClass("media-object") == false &&
+              $(this).attr("data-src") !=
+                "https://static.alphacoders.com/contest-50-71.png"
+            ) {
+              tags_image[j] = $(this).attr("data-src");
+              tags_name[j] = $(this)
+                .parent()
+                .attr("title");
+              tags_id[j] = $(this)
+                .parent()
+                .attr("href")
+                .replace("big.php?i=", "");
+              j += 1;
+            }
+          });
+
+          reser.render("search", {
+            title: title,
+            name_search: req.query.name,
+            count: number_count,
+            image: tags_image,
+            id: tags_id,
+            name: tags_name,
+            lastPage: lastPage
+          });
+        }
+      }
+    );
+  }
 });
 
 app.listen(port, function() {

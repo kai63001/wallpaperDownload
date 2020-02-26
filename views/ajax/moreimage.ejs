@@ -1,5 +1,5 @@
 <div class="container">
-    <h4> <i class="fas fa-images"></i> Pictures you may like</h4>
+  <h4><i class="fas fa-images"></i> Pictures you may like</h4>
   <div class="row">
     <% for(var i=0; i < image.length; i++) {%>
     <div class="btngro col-md-4 col-12" style="margin-bottom: 15px;">
@@ -16,7 +16,10 @@
           alt=""
         />
         <% for(var s=0; s < tags.length; s++) {%> <% if (tags[i][s]) { %>
-        <a href="<%= atags[i][s] %>" style="text-decoration: none;">
+        <a
+          href="/tags/<%= tags[i][s].replace(/ /g,'-') %>/<%= atags[i][s] %>"
+          style="text-decoration: none;"
+        >
           <span class="badge badge-dark" style="padding-right: 5px;"
             ><%= tags[i][s] %>
           </span>
