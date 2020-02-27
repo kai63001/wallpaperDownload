@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> <%= name_search.replace(/-/g,' ') %> | <%= title %></title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Rubik:500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .download-btn {
+        position: absolute;
+        top: 5px;
+        right: 25px;
+        color: white;
+        background-color: black;
+        padding: 3px 9px;
+        border-radius: 3px;
+        opacity: 0;
+        transition: 0.5s;
+        border: 0px;
+        text-decoration: none;
+      }
+      .download-btn:hover {
+        color: black;
+        background-color: white;
+      }
+      .btngro:hover .download-btn {
+        opacity: 1;
+      }
+      .page-item a{
+        position: relative;
+        display: block;
+        padding: .5rem .75rem;
+        margin-left: -1px;
+        line-height: 1.25;
+        color: #343a40;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        text-decoration: none;
+
+      }
+      .activepagi a{
+          text-decoration: none;
+          background-color: #343a40 !important;
+          color: white;
+          border-color: #343a40 !important;
+      }
+    </style>
+  </head>
+
+  <body style="font-family: 'Rubik' !important;">
+    <%- include('include/nav') %>
+    <center>
+      <h1><%= name_search.replace(/-/g,' ') %></h1>
+      <%= count %> wallpaper
+    </center>
+    <br />
+
+    <div class="container">
+        <div class="row">
+          <% for(var i=0; i < image.length; i++) {%>
+          <div class="btngro col-md-4 col-12">
+            <a
+              href="/image/<%= id[i] %> "
+              style="text-decoration: none;color: black;margin-bottom: 15px;"
+            >
+              <img
+                style="margin-bottom: 5px;"
+                width="100%"
+                class="lazyload"
+                data-src="<%= image[i].replace('-350-','-1920-'); %>"
+                src="<%= image[i] %>"
+                alt="<%= name[i] %>"
+              />
+             
+              <p
+                style="height: 2em;
+                      white-space: wrap;
+                      text-overflow: ellipsis;"
+              >
+                <%= name[i].replace('HD Wallpaper | Background Image','') %>
+              </p>
+            </a>
+            <button
+            id="download"
+            type="button"
+            data-toggle="modal"
+            data-target="#downloadPOPUp"
+            class="download-btn"
+            onclick="downloadF('<%= image[i] %>')"
+          >
+            <i class="fas fa-download"></i>
+          </button>
+          </div>
+          <% } %>
+        </div>
+      </div>
+<br>        <ul id="pagination-demo" class="justify-content-center">
+        </ul>
+        <br>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+    ></script>
+    
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://www.jqueryscript.net/demo/Simple-Customizable-Pagination-Plugin-with-jQuery-Bootstrap-Twbs-Pagination/jquery.twbsPagination.js"></script>
+
+    <div
+    class="modal fade"
+    id="downloadPOPUp"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="downloadPOPUpLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <a class="modal-body">
+          <center><b>Download Wallpaper</b></center>
+          <br />
+          <center id="countDown">
+            Please, wait while your link is generating :
+            <span id="intnum">5</span>
+          </center>
+          <center id="downloadsuccess">
+              <br>
+            <a id="adownload" href="" target="_blank" class="btn btn-dark col-md-9" style="color: white;" download="">
+              <i class="fas fa-download"></i> Download
+            </a>
+          </center>
+          <br>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+     $('#pagination-demo').twbsPagination({
+        totalPages: parseInt('<%= lastPage %>'), 
+
+        // the current page that show on start
+        startPage: 1,
+
+        // maximum visible pages
+        visiblePages: 5,
+
+        initiateStartPageClick: true,
+
+        hideOnlyOnePage: true,
+
+        // template for pagination links
+        href:'?page={{number}}',
+
+        pageVariable: '{{page}}',
+        totalPagesVariable: '{{total_pages}}',
+
+        page: null,
+
+        // Text labels
+        first: 'First',
+        prev: 'Previous',
+        next: 'Next',
+        last: 'Last',
+
+        // carousel-style pagination
+        loop: false,
+
+        // callback function
+        onPageClick: null,
+
+        paginationClass: 'pagination',
+        nextClass: 'page-item next',
+        prevClass: 'page-item prev',
+        lastClass: 'page-item last',
+        firstClass: 'page-item first',
+        pageClass: 'page-item',
+        activeClass: 'activepagi',
+        disabledClass: 'disabled',
+        anchorClass: 'page-link',
+    });
+    $("#downloadsuccess").hide();
+   function downloadF(image) {
+      var counter = 6;
+
+        $("#adownload").attr("href",image.replace('thumb-350-',''));
+        $("#downloadsuccess").hide();
+        $("#countDown").show();
+      $("#intnum").html(counter);
+
+      var interval = setInterval(function() {
+        counter--;
+        $("#intnum").html(counter);
+        if (counter == 0) {
+          $("#downloadsuccess").show();
+          $("#countDown").hide();
+          clearInterval(interval);
+        }
+      }, 1000);
+    };
+  </script>
+  </body>
+</html>
