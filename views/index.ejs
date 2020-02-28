@@ -1,118 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= title %></title>
-    <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"></script>
-    <link
-      href="https://fonts.googleapis.com/css?family=Rubik:500&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      .download-btn {
-        position: absolute;
-        top: 5px;
-        right: 25px;
-        color: white;
-        background-color: black;
-        padding: 3px 9px;
-        border-radius: 3px;
-        opacity: 0;
-        transition: 0.5s;
-        border: 0px;
-        text-decoration: none;
-      }
-      .download-btn:hover {
-        color: black;
-        background-color: white;
-      }
-      .btngro:hover .download-btn {
-        opacity: 1;
-      }
-    </style>
-  </head>
 
-  <body style="font-family: 'Rubik' !important;">
-    <%- include('include/nav') %>
-    <center>
-      <h1>Wallpapers Moon</h1>
-      Get the Best HD Wallpapers
-    </center>
-    <br />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+  <meta name="keywords"
+    content="wallpaper,wallpapers,wallpaper hd,wallpaper 4k,download wallpaper,desktop wallpaper,mobile wallpaper,background 4k,background,backgorund hd,download background,windows wallpaper,windows background,hd wallpapers">
+  <meta name="description" content="wallpaper background download free 4k hd wallpapers">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Rubik:500&display=swap" rel="stylesheet" />
+  <style>
+    .download-btn {
+      position: absolute;
+      top: 5px;
+      right: 25px;
+      color: white;
+      background-color: black;
+      padding: 3px 9px;
+      border-radius: 3px;
+      opacity: 0;
+      transition: 0.5s;
+      border: 0px;
+      text-decoration: none;
+    }
 
-    <div class="container">
-      <div class="row">
-        <% for(var i=1; i < image.length; i++) {%>
-        <div class="btngro col-md-4 col-12">
-          <a
-            href="/image/<%= id[i] %> "
-            style="text-decoration: none;color: black;margin-bottom: 15px;"
-          >
-            <img
-              style="margin-bottom: 5px;"
-              width="100%"
-              class="lazyload"
-              data-src="<%= image[i].replace('-350-','-1920-'); %>"
-              src="<%= image[i] %>"
-              alt="<%= name[i] %>"
-            />
-           
-            <p
-              style="height: 2em;
+    .download-btn:hover {
+      color: black;
+      background-color: white;
+    }
+
+    .btngro:hover .download-btn {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body style="font-family: 'Rubik' !important;">
+  <%- include('include/nav') %>
+  <center>
+    <h1>Wallpapers Moon</h1>
+    Get the Best HD Wallpapers
+  </center>
+  <br />
+
+  <div class="container">
+    <div class="row">
+      <% for(var i=1; i < image.length; i++) {%>
+      <div class="btngro col-md-4 col-12">
+        <a href="/image/<%= id[i] %> " style="text-decoration: none;color: black;margin-bottom: 15px;">
+          <img style="margin-bottom: 5px;" width="100%" class="lazyload"
+            data-src="<%= image[i].replace('-350-','-1920-'); %>" src="<%= image[i] %>" alt="<%= name[i] %>" />
+
+          <p style="height: 2em;
                     white-space: wrap;
-                    text-overflow: ellipsis;"
-            >
-              <%= name[i].replace('HD Wallpaper | Background Image','') %>
-            </p>
-          </a>
-          <button
-          id="download"
-          type="button"
-          data-toggle="modal"
-          data-target="#downloadPOPUp"
-          class="download-btn"
-          onclick="downloadF('<%= image[i] %>')"
-        >
+                    text-overflow: ellipsis;">
+            <%= name[i].replace('HD Wallpaper | Background Image','') %>
+          </p>
+        </a>
+        <button id="download" type="button" data-toggle="modal" data-target="#downloadPOPUp" class="download-btn"
+          onclick="downloadF('<%= image[i] %>')">
           <i class="fas fa-download"></i>
         </button>
-        </div>
-        <% } %>
       </div>
+      <% } %>
     </div>
+  </div>
 
-    <script
-      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-      crossorigin="anonymous"
-    ></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
 
-    <div
-    class="modal fade"
-    id="downloadPOPUp"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="downloadPOPUpLabel"
-    aria-hidden="true"
-  >
+  <div class="modal fade" id="downloadPOPUp" tabindex="-1" role="dialog" aria-labelledby="downloadPOPUpLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <a class="modal-body">
@@ -123,28 +93,28 @@
             <span id="intnum">5</span>
           </center>
           <center id="downloadsuccess">
-              <br>
+            <br>
             <a id="adownload" href="" target="_blank" class="btn btn-dark col-md-9" style="color: white;" download="">
               <i class="fas fa-download"></i> Download
             </a>
           </center>
           <br>
-        </div>
       </div>
     </div>
+  </div>
   </div>
 
   <script>
     $("#downloadsuccess").hide();
-   function downloadF(image) {
+    function downloadF(image) {
       var counter = 6;
 
-        $("#adownload").attr("href",image.replace('thumb-350-',''));
-        $("#downloadsuccess").hide();
-        $("#countDown").show();
+      $("#adownload").attr("href", image.replace('thumb-350-', ''));
+      $("#downloadsuccess").hide();
+      $("#countDown").show();
       $("#intnum").html(counter);
 
-      var interval = setInterval(function() {
+      var interval = setInterval(function () {
         counter--;
         $("#intnum").html(counter);
         if (counter == 0) {
@@ -155,5 +125,6 @@
       }, 1000);
     };
   </script>
-  </body>
+</body>
+
 </html>

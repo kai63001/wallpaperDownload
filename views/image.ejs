@@ -1,200 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= name %> | <%= title %></title>
-    <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"></script>
-    <link
-      href="https://fonts.googleapis.com/css?family=Rubik:500&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      .download-btn {
-        position: absolute;
-        top: 5px;
-        right: 25px;
-        color: white;
-        background-color: black;
-        padding: 3px 9px;
-        border-radius: 3px;
-        opacity: 0;
-        transition: 0.5s;
-        text-decoration: none;
-      }
 
-      .download-btn:hover {
-        color: black;
-        background-color: white;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= name.trim() %> | <%= title %></title>
+  <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+  <meta name="keywords"
+    content="<%= name.trim() %>,<%= name.trim() %> background,<%= name.trim() %> wallpaper,<%= name.trim() %> wallpaper 4k,<% if (tag.length > 0) { %><% for( let i = 0; i < tag.length;i++ ) { %><%= tag[i].trim() %>,<% } %><% } %><%= categoly[0] %> wallpaper,<%= categoly[1] %> wallpaper">
 
-      .btngro:hover .download-btn {
-        opacity: 1;
-      }
+  <meta name="description"
+    content="Download wallpaper <%= name.trim() %> hd 4k background free <% if (tag.length > 0) { %><% for( let i = 0; i < tag.length;i++ ) { %><%= tag[i].trim() %> <% } %><% } %><%= categoly[0] %> <%= categoly[1] %>">
+  <meta name="author" content="www.wallpapersmoon.com">
+  <meta name="copyright" content="<%= title %>" />
+  <meta name="application-name" content="<%= name.trim() %> | <%= title %>" />
 
-      .author {
-        text-decoration: none;
-        color: black;
-      }
+  <meta property="og:title" content="<%= name.trim() %> | <%= title %>" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image" content="<%= image %>" />
+  <meta property="og:description" content="Download wallpaper <%= name.trim() %> hd 4k background free <% if (tag.length > 0) { %><% for( let i = 0; i < tag.length;i++ ) { %><%= tag[i].trim() %> <% } %><% } %><%= categoly[0] %> <%= categoly[1] %>" />
+  <!-- <meta property="og:url" content="https://www.wallpapersmoon.com/<%= id %>" /> -->
+  <meta property='og:site_name' content='WALLPAPERSMOON.COM' />
 
-      .author:hover {
-        text-decoration: underline;
-        color: black;
-      }
-    </style>
-  </head>
+  <meta name="twitter:title"
+    content="<%= name.trim() %> | <%= title %>" />
+  <meta name="twitter:description" content="Download wallpaper <%= name.trim() %> hd 4k background free <% if (tag.length > 0) { %><% for( let i = 0; i < tag.length;i++ ) { %><%= tag[i].trim() %> <% } %><% } %><%= categoly[0] %> <%= categoly[1] %>" />
+  <meta name="twitter:image:src" content="<%= image %>" />
+  <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Rubik:500&display=swap" rel="stylesheet" />
+  <style>
+    .download-btn {
+      position: absolute;
+      top: 5px;
+      right: 25px;
+      color: white;
+      background-color: black;
+      padding: 3px 9px;
+      border-radius: 3px;
+      opacity: 0;
+      transition: 0.5s;
+      text-decoration: none;
+    }
 
-  <body style="font-family: 'Rubik' !important;">
-    <%- include('include/nav') %>
-    <center>
-      <h1><%= name %></h1>
-      <% if (auth) { %>
-      <a href="" class="author">
-        <i class="fas fa-user"></i> <%= auth %>
-      </a>
-      <% } %>
-    </center>
-    <br />
+    .download-btn:hover {
+      color: black;
+      background-color: white;
+    }
 
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <img src="<%= image %>" width="100%" alt="<%= name %>" />
-          <div
-            class="badge badge-dark"
-            style="position: absolute;right: 25px;top: 10px;opacity: 0.7;"
-          >
-            <i class="fas fa-eye"></i> <%= view %>
-          </div>
+    .btngro:hover .download-btn {
+      opacity: 1;
+    }
+
+    .author {
+      text-decoration: none;
+      color: black;
+    }
+
+    .author:hover {
+      text-decoration: underline;
+      color: black;
+    }
+  </style>
+</head>
+
+<body style="font-family: 'Rubik' !important;">
+  <%- include('include/nav') %>
+  <center>
+    <h1><%= name %></h1>
+    <% if (auth) { %>
+    <a href="" class="author">
+      <i class="fas fa-user"></i> <%= auth %>
+    </a>
+    <% } %>
+  </center>
+  <br />
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <img src="<%= image %>" width="100%" alt="<%= name %>" />
+        <div class="badge badge-dark" style="position: absolute;right: 25px;top: 10px;opacity: 0.7;">
+          <i class="fas fa-eye"></i> <%= view %>
         </div>
       </div>
+    </div>
 
-      <br />
-      <div class="float-left">
-        <% if (categoly.length > 0) { %>
-        <i class="fas fa-images"></i> Category : <a href="/categoly/<%= categoly[0].replace(/ /g,'-') %>/<%= acategoly[0].substr(0,acategoly[0].indexOf("&")).replace('by_category.php?id=','').replace('by_sub_category.php?id=','') %>"><span class="badge badge-dark" style="padding-right: 5px;"
-            ><%= categoly[0] %>
-          </span></a>
-
-          <a href="/sub_categoly/<%= categoly[1].replace(/ /g,'-') %>/<%= acategoly[1].substr(0,acategoly[1].indexOf("&")).replace('by_category.php?id=','').replace('by_sub_category.php?id=','') %>"><span class="badge badge-dark" style="padding-right: 5px;"
-          ><%= categoly[1] %>
+    <br />
+    <div class="float-left">
+      <% if (categoly.length > 0) { %>
+      <i class="fas fa-images"></i> Category : <a
+        href="/categoly/<%= categoly[0].replace(/ /g,'-') %>/<%= acategoly[0].substr(0,acategoly[0].indexOf("&")).replace('by_category.php?id=','').replace('by_sub_category.php?id=','') %>"><span
+          class="badge badge-dark" style="padding-right: 5px;"><%= categoly[0] %>
         </span></a>
-        <br />
 
-        <% } %>
-        <% if (tag.length > 0) { %>
-            <i class="fas fa-tags"></i> Tags : <% for( let i = 0; i < tag.length;
+      <a
+        href="/sub_categoly/<%= categoly[1].replace(/ /g,'-') %>/<%= acategoly[1].substr(0,acategoly[1].indexOf("&")).replace('by_category.php?id=','').replace('by_sub_category.php?id=','') %>"><span
+          class="badge badge-dark" style="padding-right: 5px;"><%= categoly[1] %>
+        </span></a>
+      <br />
+
+      <% } %>
+      <% if (tag.length > 0) { %>
+      <i class="fas fa-tags"></i> Tags : <% for( let i = 0; i < tag.length;
             i++ ) { %>
-            <a href="/tags/<%= tag[i].replace(/ /g,'-') %>/<%= atag[i] %>"><span class="badge badge-dark" style="padding-right: 5px;"
-            ><%= tag[i] %>
-            </span></a>
-            <% } %>
-        <% } %>
+      <a href="/tags/<%= tag[i].replace(/ /g,'-') %>/<%= atag[i] %>"><span class="badge badge-dark"
+          style="padding-right: 5px;"><%= tag[i] %>
+        </span></a>
+      <% } %>
+      <% } %>
 
-      </div>
-      <button
-        id="download"
-        type="button"
-        data-toggle="modal"
-        data-target="#downloadPOPUp"
-        class="btn btn-danger float-right col-12 col-md-2"
-      >
-        <i class="fas fa-download"></i> Download
-      </button>
     </div>
-    <br /><br /><br />
-    <div class="container">
-      <h4><i class="fas fa-comments"></i> Comments</h4>
-      <div id="fb-root"></div>
-      <script
-        async
-        defer
-        crossorigin="anonymous"
-        src="https://connect.facebook.net/th_TH/sdk.js#xfbml=1&version=v6.0&appId=153313228407799&autoLogAppEvents=1"
-      ></script>
-      <div
-        class="fb-comments"
-        data-href="https://wallpapersmoon.com/image/<%= id %>"
-        data-width="100%"
-        data-numposts="5"
-      ></div>
+    <button id="download" type="button" data-toggle="modal" data-target="#downloadPOPUp"
+      class="btn btn-danger float-right col-12 col-md-2">
+      <i class="fas fa-download"></i> Download
+    </button>
+  </div>
+  <br /><br /><br />
+  <div class="container">
+    <h4><i class="fas fa-comments"></i> Comments</h4>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous"
+      src="https://connect.facebook.net/th_TH/sdk.js#xfbml=1&version=v6.0&appId=153313228407799&autoLogAppEvents=1"></script>
+    <div class="fb-comments" data-href="https://wallpapersmoon.com/image/<%= id %>" data-width="100%" data-numposts="5">
     </div>
-    <br />
-    <div class="container">
-      <div class="row">
-        <div id="moreImage"></div>
-      </div>
+  </div>
+  <br />
+  <div class="container">
+    <div class="row">
+      <div id="moreImage"></div>
     </div>
-    <br /><br /><br />
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-      crossorigin="anonymous"
-    ></script>
+  </div>
+  <br /><br /><br />
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
 
-    <div
-      class="modal fade"
-      id="downloadPOPUp"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="downloadPOPUpLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <a class="modal-body">
-            <center><b>Download Wallpaper</b></center>
-            <br />
-            <center id="countDown">
-              Please, wait while your link is generating :
-              <span id="intnum">5</span>
-            </center>
-            <center id="downloadsuccess">
-                <br>
-              <a href="<%= image.replace('thumb-1920-','') %>" target="_blank" class="btn btn-dark col-md-9" style="color: white;" download="w3logo">
-                <i class="fas fa-download"></i> Download
-              </a>
-            </center>
+  <div class="modal fade" id="downloadPOPUp" tabindex="-1" role="dialog" aria-labelledby="downloadPOPUpLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <a class="modal-body">
+          <center><b>Download Wallpaper</b></center>
+          <br />
+          <center id="countDown">
+            Please, wait while your link is generating :
+            <span id="intnum">5</span>
+          </center>
+          <center id="downloadsuccess">
             <br>
-          </div>
-        </div>
+            <a href="<%= image.replace('thumb-1920-','') %>" target="_blank" class="btn btn-dark col-md-9"
+              style="color: white;" download="w3logo">
+              <i class="fas fa-download"></i> Download
+            </a>
+          </center>
+          <br>
       </div>
     </div>
+  </div>
+  </div>
 
-    <script>
-      $.ajax({
-        url: "../../moreimage/<%= id %>",
-        success: function(result) {
-          $("#moreImage").html(result);
+  <script>
+    $.ajax({
+      url: "../../moreimage/<%= id %>",
+      success: function (result) {
+        $("#moreImage").html(result);
+      }
+    });
+    $("#downloadsuccess").hide();
+    $("#download").click(function () {
+      var counter = 6;
+      var interval = setInterval(function () {
+        counter--;
+        $("#intnum").html(counter);
+        if (counter == 0) {
+          $("#downloadsuccess").show();
+          $("#countDown").hide();
+          clearInterval(interval);
         }
-      });
-      $("#downloadsuccess").hide();
-      $("#download").click(function() {
-        var counter = 6;
-        var interval = setInterval(function() {
-          counter--;
-          $("#intnum").html(counter);
-          if (counter == 0) {
-            $("#downloadsuccess").show();
-            $("#countDown").hide();
-            clearInterval(interval);
-          }
-        }, 1000);
-      });
-    </script>
-  </body>
+      }, 1000);
+    });
+  </script>
+</body>
+
 </html>
